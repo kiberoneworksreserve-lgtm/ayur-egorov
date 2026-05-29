@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дети и родители | Аюр, Арсалан, Татьяна, Арьяна, Ардан</title>
+    <style>
+        :root {
+            --bg-light-green: #e0f2e9;
+            --card-bg: #ffffff;
+            --text-dark: #1e2f1e;
+            --text-muted: #4a5b4a;
+            --accent-green: #2e7d32;
+            --border-light: #c8e6c9;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            --font-medium: 1rem;
+            --radius: 0px;
+            --shape-color: #8fbc8f;
+            /* более тёмный зелёный для фигур */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-light-green);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-size: var(--font-medium);
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Фоновые фигуры */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.25;
+        }
+
+        /* Треугольник */
+        .shape--triangle {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 40px solid var(--shape-color);
+            background: none;
+        }
+
+        /* Квадрат */
+        .shape--square {
+            width: 30px;
+            height: 30px;
+            background: var(--shape-color);
+            transform: rotate(15deg);
+        }
+
+        /* Ромб (квадрат повёрнутый на 45°) */
+        .shape--rhombus {
+            width: 30px;
+            height: 30px;
+            background: var(--shape-color);
+            transform: rotate(45deg);
+        }
+
+        /* Шестиугольник */
+        .shape--hexagon {
+            width: 36px;
+            height: 20px;
+            background: var(--shape-color);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+
+        /* Положения фигур */
+        .shape--1 {
+            top: 10%;
+            left: 5%;
+        }
+        .shape--2 {
+            top: 20%;
+            right: 8%;
+        }
+        .shape--3 {
+            bottom: 15%;
+            left: 10%;
+        }
+        .shape--4 {
+            bottom: 25%;
+            right: 5%;
+        }
+        .shape--5 {
+            top: 50%;
+            left: 3%;
+        }
+        .shape--6 {
+            top: 70%;
+            right: 12%;
+        }
+        .shape--7 {
+            top: 5%;
+            left: 45%;
+        }
+        .shape--8 {
+            bottom: 10%;
+            left: 50%;
+        }
+        .shape--9 {
+            top: 35%;
+            right: 2%;
+        }
+        .shape--10 {
+            bottom: 40%;
+            left: 18%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header-icon {
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 0.8rem;
+            background: linear-gradient(135deg, #a5d6a7 0%, #66bb6a 100%);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            transition: transform 0.3s ease;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #1e2f1e;
+            margin-bottom: 0.4rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Ряды карточек */
+        .family-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .row-divider {
+            width: 100%;
+            margin: 0.5rem 0 1.5rem;
+            border-top: 1px dashed #bdbdbd;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.8rem 1.5rem 1.5rem;
+            flex: 1 1 180px;
+            min-width: 160px;
+            max-width: 200px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-left: 6px solid var(--accent-green);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            background: #ffffff;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .card--parent {
+            border-left-color: #388e3c;
+        }
+        .card--me {
+            border-left-color: #66bb6a;
+        }
+        .card--sister {
+            border-left-color: #81c784;
+        }
+        .card--brother {
+            border-left-color: #a5d6a7;
+        }
+
+        .card__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 0.8rem;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            border: 2px solid #c8e6c9;
+        }
+
+        .card--parent .card__icon {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-color: #81c784;
+        }
+        .card--me .card__icon {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-color: #a5d6a7;
+        }
+        .card--sister .card__icon {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #a5d6a7;
+        }
+        .card--brother .card__icon {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-color: #c8e6c9;
+        }
+
+        .card__role {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: var(--accent-green);
+            margin-bottom: 0.3rem;
+            background: #e8f5e9;
+            padding: 0.2rem 0.7rem;
+            display: inline-block;
+        }
+
+        .card__name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e2f1e;
+            margin-bottom: 0.3rem;
+            line-height: 1.3;
+        }
+
+        .card__info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .card__info strong {
+            color: #1e2f1e;
+            font-weight: 600;
+        }
+
+        .card__detail {
+            margin-top: 0.4rem;
+            background: #f1f8e9;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #2e3b2e;
+            width: 100%;
+            border-left: 3px solid #c8e6c9;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .card__detail .label {
+            font-weight: 600;
+            color: #2e7d32;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .bottom-line {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            border-top: 3px solid #a5d6a7;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 800px) {
+            .card {
+                flex: 1 1 45%;
+                max-width: 45%;
+            }
+        }
+        @media (max-width: 550px) {
+            .card {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        *,
+        *::before,
+        *::after {
+            border-radius: 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Фоновые геометрические фигуры -->
+    <div class="background-shapes">
+        <div class="shape shape--triangle shape--1"></div>
+        <div class="shape shape--square shape--2"></div>
+        <div class="shape shape--rhombus shape--3"></div>
+        <div class="shape shape--hexagon shape--4"></div>
+        <div class="shape shape--triangle shape--5"></div>
+        <div class="shape shape--square shape--6"></div>
+        <div class="shape shape--rhombus shape--7"></div>
+        <div class="shape shape--hexagon shape--8"></div>
+        <div class="shape shape--triangle shape--9"></div>
+        <div class="shape shape--square shape--10"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-icon" aria-label="Дом"></div>
+            <h1>Дети и родители</h1>
+            <p class="subtitle">Наша дружная семья</p>
+        </header>
+
+        <div class="family-row">
+            <div class="card card--parent">
+                <div class="card__icon">Па</div>
+                <span class="card__role">Папа</span>
+                <h2 class="card__name">Арсалан</h2>
+                <p class="card__info">
+                    <strong>Инженер электрик</strong>
+                </p>
+                <div class="card__detail">
+                    <span class="label">Работа</span>
+                    <span>Электросети</span>
+                </div>
+            </div>
+
+            <div class="card card--parent">
+                <div class="card__icon">Ма</div>
+                <span class="card__role">Мама</span>
+                <h2 class="card__name">Татьяна</h2>
+                <p class="card__info">
+                    <strong>Казначейство</strong>
+                </p>
+                <div class="card__detail">
+                    <span class="label">Работа</span>
+                    <span>Финансы</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-divider"></div>
+
+        <div class="family-row">
+            <div class="card card--me">
+                <div class="card__icon">Я</div>
+                <span class="card__role">Я</span>
+                <h2 class="card__name">Аюр</h2>
+                <p class="card__info">
+                    Возраст: <strong>12 лет</strong>
+                </p>
+                <div class="card__detail">
+                    <span class="label">Занятия</span>
+                    <span>Английский язык</span>
+                </div>
+            </div>
+
+            <div class="card card--sister">
+                <div class="card__icon">Се</div>
+                <span class="card__role">Сестра</span>
+                <h2 class="card__name">Арьяна</h2>
+                <p class="card__info">
+                    Возраст: <strong>10 лет</strong>
+                </p>
+                <div class="card__detail">
+                    <span class="label">Занятия</span>
+                    <span>Танцы</span>
+                </div>
+            </div>
+
+            <div class="card card--brother">
+                <div class="card__icon">Бр</div>
+                <span class="card__role">Брат</span>
+                <h2 class="card__name">Ардан</h2>
+                <p class="card__info">
+                    Возраст: <strong>3 года</strong>
+                </p>
+                <div class="card__detail">
+                    <span class="label">Занятия</span>
+                    <span>Ходит в садик</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-line"></div>
+    </div>
+</body>
+</html>
